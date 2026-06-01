@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Reset your TaskRhythm password</title>
+  <style>
+    :root { color-scheme: light dark; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.6; max-width: 640px; margin: 0 auto; padding: 4rem 1.25rem;
+      color: #1a1a1a; background: #ffffff;
+    }
+    @media (prefers-color-scheme: dark) {
+      body { color: #e6e6e6; background: #121212; }
+      a { color: #8ab4f8; }
+      .token { background: #1e1e1e; border-color: #333; }
+    }
+    h1 { font-size: 1.6rem; }
+    a { color: #1a73e8; }
+    .btn {
+      display: inline-block; margin: 1rem 0; padding: 0.75rem 1.5rem;
+      background: #1a73e8; color: #fff; text-decoration: none; border-radius: 8px;
+      font-weight: 600;
+    }
+    .token {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      word-break: break-all; background: #f5f5f5; border: 1px solid #ddd;
+      border-radius: 6px; padding: 0.75rem; font-size: 0.95rem;
+    }
+    .muted { color: #888; font-size: 0.9rem; }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <h1>Reset your TaskRhythm password</h1>
+
+  <div id="have-token" class="hidden">
+    <p>Tap the button below to open TaskRhythm and set a new password.</p>
+    <p><a id="open-app" class="btn" href="#">Open TaskRhythm</a></p>
+    <p class="muted">
+      Button didn't open the app? Open TaskRhythm manually, go to
+      <em>Forgot password → I have a code</em>, and paste this reset token:
+    </p>
+    <p class="token" id="token-text"></p>
+  </div>
+
+  <div id="no-token" class="hidden">
+    <p>This reset link is missing its token, or it has already been used.</p>
+    <p>Open TaskRhythm and request a new password reset email.</p>
+  </div>
+
+  <p class="muted" style="margin-top:2rem">
+    Reset links expire 15 minutes after they're sent. If yours has expired,
+    request a new one from the app.
+  </p>
+
+  <script>
+    (function () {
+      var params = new URLSearchParams(window.location.search);
+      var token = params.get("token");
+      if (token) {
+        document.getElementById("token-text").textContent = token;
+        var deepLink = "taskrhythm://reset?token=" + encodeURIComponent(token);
+        document.getElementById("open-app").setAttribute("href", deepLink);
+        document.getElementById("have-token").classList.remove("hidden");
+      } else {
+        document.getElementById("no-token").classList.remove("hidden");
+      }
+    })();
+  </script>
+</body>
+</html>
