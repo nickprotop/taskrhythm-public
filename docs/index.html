@@ -3,27 +3,249 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>TaskRhythm</title>
+  <title>TaskRhythm — Tasks that repeat, kept on rhythm</title>
+  <meta name="description" content="A focused Android task manager built around a workday-aware recurrence engine. Reminders that fire on time, completion history, Material You design.">
+
+  <!-- Open Graph / social preview -->
+  <meta property="og:title" content="TaskRhythm">
+  <meta property="og:description" content="Tasks that repeat, kept on rhythm — workday-aware recurrence and reminders for Android.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="./assets/feature-graphic.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="./assets/icon-192.png">
+  <link rel="apple-touch-icon" href="./assets/icon-192.png">
+
   <style>
-    :root { color-scheme: light dark; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      line-height: 1.6; max-width: 640px; margin: 0 auto; padding: 4rem 1.25rem;
-      color: #1a1a1a; background: #ffffff;
+    :root {
+      --indigo: #3F51B5;
+      --indigo-dark: #303F9F;
+      --indigo-deep: #283593;
+      --ink: #1a1a2e;
+      --body: #3c3c4a;
+      --muted: #6b6b7b;
+      --surface: #ffffff;
+      --surface-2: #f5f6fb;
+      --border: #e6e7f0;
+      --radius: 16px;
+      --maxw: 980px;
     }
     @media (prefers-color-scheme: dark) {
-      body { color: #e6e6e6; background: #121212; } a { color: #8ab4f8; }
+      :root {
+        --ink: #f0f1f7;
+        --body: #c7c8d4;
+        --muted: #9a9aaa;
+        --surface: #121219;
+        --surface-2: #1b1b26;
+        --border: #2a2a38;
+      }
     }
-    h1 { font-size: 2rem; }
-    a { color: #1a73e8; }
-    ul { padding-left: 1.2rem; }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      color: var(--body);
+      background: var(--surface);
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: var(--indigo); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    h1, h2, h3 { color: var(--ink); line-height: 1.2; letter-spacing: -0.02em; }
+
+    .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 1.5rem; }
+
+    /* ---------- Hero ---------- */
+    .hero {
+      background: linear-gradient(135deg, var(--indigo) 0%, var(--indigo-dark) 55%, var(--indigo-deep) 100%);
+      color: #fff;
+      padding: 5rem 1.5rem 5.5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::after {
+      /* subtle radial sheen, top-left, echoing the feature graphic */
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 22% 30%, rgba(255,255,255,0.10), transparent 45%);
+      pointer-events: none;
+    }
+    .hero-inner { position: relative; max-width: 720px; margin: 0 auto; }
+    .mark {
+      width: 96px; height: 96px;
+      border-radius: 24px;
+      display: block; margin: 0 auto 1.5rem;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.28);
+    }
+    .hero h1 {
+      color: #fff;
+      font-size: clamp(2.4rem, 7vw, 3.6rem);
+      margin: 0 0 0.6rem;
+      font-weight: 800;
+    }
+    .tagline {
+      font-size: clamp(1.05rem, 3vw, 1.35rem);
+      color: rgba(255,255,255,0.92);
+      margin: 0 auto 2.2rem;
+      max-width: 36ch;
+    }
+    .cta {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: #fff; color: var(--indigo-dark);
+      font-weight: 700; font-size: 1.05rem;
+      padding: 0.85rem 1.8rem; border-radius: 999px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.22);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .cta:hover { text-decoration: none; transform: translateY(-2px); box-shadow: 0 12px 26px rgba(0,0,0,0.28); }
+    .cta-note { display: block; margin-top: 1rem; font-size: 0.85rem; color: rgba(255,255,255,0.72); }
+
+    /* ---------- Sections ---------- */
+    section { padding: 4rem 0; }
+    .section-head { text-align: center; max-width: 640px; margin: 0 auto 2.6rem; }
+    .section-head h2 { font-size: clamp(1.6rem, 4vw, 2.1rem); margin: 0 0 0.6rem; }
+    .section-head p { color: var(--muted); margin: 0; font-size: 1.05rem; }
+    .eyebrow {
+      text-transform: uppercase; letter-spacing: 0.12em; font-size: 0.78rem;
+      font-weight: 700; color: var(--indigo); margin: 0 0 0.6rem;
+    }
+
+    /* ---------- Feature grid ---------- */
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.1rem;
+    }
+    .card {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.6rem 1.5rem;
+      transition: transform 0.15s ease, border-color 0.15s ease;
+    }
+    .card:hover { transform: translateY(-3px); border-color: var(--indigo); }
+    .card .ico {
+      width: 44px; height: 44px; border-radius: 12px;
+      display: grid; place-items: center; margin-bottom: 1rem;
+      background: rgba(63,81,181,0.12); color: var(--indigo);
+    }
+    .card .ico svg { width: 24px; height: 24px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .card h3 { font-size: 1.12rem; margin: 0 0 0.4rem; }
+    .card p { margin: 0; font-size: 0.96rem; color: var(--muted); }
+
+    /* ---------- Screenshots ---------- */
+    .shots-band { background: var(--surface-2); }
+    .shots {
+      display: flex; gap: 1.25rem; overflow-x: auto;
+      padding: 0.5rem 0 1.25rem; scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+    }
+    .shots img {
+      height: 460px; width: auto; border-radius: 20px;
+      scroll-snap-align: center; flex: 0 0 auto;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.18);
+      border: 1px solid var(--border);
+    }
+    .shots-hint { text-align: center; color: var(--muted); font-size: 0.85rem; margin-top: 0.5rem; }
+
+    /* ---------- Footer ---------- */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2.5rem 1.5rem;
+      text-align: center; color: var(--muted); font-size: 0.92rem;
+    }
+    footer .links { margin-bottom: 0.8rem; }
+    footer .links a { margin: 0 0.7rem; color: var(--body); }
+    footer .brand { display: inline-flex; align-items: center; gap: 0.5rem; font-weight: 700; color: var(--ink); margin-bottom: 0.8rem; }
+    footer .brand img { width: 24px; height: 24px; border-radius: 6px; }
   </style>
 </head>
 <body>
-  <h1>TaskRhythm</h1>
-  <p>A task and recurrence management app for Android.</p>
-  <ul>
-    <li><a href="./privacy-policy.html">Privacy Policy</a></li>
-  </ul>
+
+  <header class="hero">
+    <div class="hero-inner">
+      <img class="mark" src="./assets/icon-512.png" alt="TaskRhythm icon" width="96" height="96">
+      <h1>TaskRhythm</h1>
+      <p class="tagline">Tasks that repeat, kept on rhythm — workday-aware reminders for Android.</p>
+      <a class="cta" href="https://play.google.com/store/apps/details?id=com.taskrhythm">
+        Get it on Google Play
+      </a>
+      <span class="cta-note">Free to use · Optional Pro unlock for multi-device sync</span>
+    </div>
+  </header>
+
+  <main>
+    <section>
+      <div class="wrap">
+        <div class="section-head">
+          <p class="eyebrow">Built for real schedules</p>
+          <h2>Recurrence that follows the rules you actually use</h2>
+          <p>Most to-do apps treat &ldquo;repeat monthly&rdquo; as date arithmetic that breaks on weekends and holidays. TaskRhythm models the patterns the way they&rsquo;re written.</p>
+        </div>
+
+        <div class="features">
+          <div class="card">
+            <div class="ico"><svg viewBox="0 0 24 24"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg></div>
+            <h3>Workday-aware recurrence</h3>
+            <p>First or last workday of the week, month, or year. Nth weekday-of-month. Nth day from the end. Weekday- and weekend-only modes.</p>
+          </div>
+          <div class="card">
+            <div class="ico"><svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></div>
+            <h3>Reminders that fire on time</h3>
+            <p>Exact-time local notifications with a default lead-time and per-task overrides. &ldquo;Done&rdquo; and &ldquo;Snooze&rdquo; actions inline. They survive a reboot.</p>
+          </div>
+          <div class="card">
+            <div class="ico"><svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><rect x="7" y="11" width="3" height="7"/><rect x="12" y="7" width="3" height="11"/><rect x="17" y="13" width="3" height="5"/></svg></div>
+            <h3>History &amp; streaks</h3>
+            <p>Every completion is logged. See your streak, 30-day chart, and per-category breakdown — and restore any past completion with one tap.</p>
+          </div>
+          <div class="card">
+            <div class="ico"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>
+            <h3>Calendar &amp; holidays</h3>
+            <p>A month view alongside the day&rsquo;s tasks. Maintain your own holiday calendar and TaskRhythm reschedules around it.</p>
+          </div>
+          <div class="card">
+            <div class="ico"><svg viewBox="0 0 24 24"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg></div>
+            <h3>Your data, your device</h3>
+            <p>Tasks live in a private database on your phone. No ads, no telemetry. Multi-device sync is opt-in and unlocked only when you choose Pro.</p>
+          </div>
+          <div class="card">
+            <div class="ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></div>
+            <h3>Material You design</h3>
+            <p>Dynamic colour on Android 12+, five curated palettes, and light / dark / true-black themes. Adaptive layouts for phone, tablet, and foldables.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="shots-band">
+      <div class="wrap">
+        <div class="section-head">
+          <p class="eyebrow">A look inside</p>
+          <h2>Clean, focused, fast</h2>
+        </div>
+        <div class="shots">
+          <img src="./screenshots/01-tasks-all-dark.png" alt="Task list" loading="lazy">
+          <img src="./screenshots/02-calendar-dark.png" alt="Calendar view" loading="lazy">
+          <img src="./screenshots/03-edit-task-dark.png" alt="Task editor" loading="lazy">
+          <img src="./screenshots/04-recurrence-picker-dark.png" alt="Recurrence picker" loading="lazy">
+          <img src="./screenshots/05-tasks-all-light.png" alt="Light theme" loading="lazy">
+        </div>
+        <p class="shots-hint">&larr; swipe to see more &rarr;</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="brand"><img src="./assets/icon-192.png" alt="">TaskRhythm</div>
+    <div class="links">
+      <a href="./privacy-policy.html">Privacy Policy</a>
+      <a href="https://play.google.com/store/apps/details?id=com.taskrhythm">Google Play</a>
+    </div>
+    <div>&copy; TaskRhythm. A task &amp; recurrence manager for Android.</div>
+  </footer>
+
 </body>
 </html>
