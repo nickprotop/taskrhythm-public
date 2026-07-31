@@ -14,28 +14,47 @@
   <link rel="icon" type="image/png" sizes="192x192" href="./assets/icon-192.png">
   <link rel="apple-touch-icon" href="./assets/icon-192.png">
 
+  <!-- Modern Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+
   <style>
     :root {
-      --indigo: #3F51B5;
-      --indigo-dark: #303F9F;
-      --indigo-deep: #283593;
-      --ink: #1a1a2e;
-      --body: #3c3c4a;
-      --muted: #6b6b7b;
-      --surface: #ffffff;
-      --surface-2: #f5f6fb;
-      --border: #e6e7f0;
-      --radius: 16px;
-      --maxw: 980px;
+      /* Light Mode Palette - Premium Indigo */
+      --bg-base: #f8fafc;
+      --bg-surface: #ffffff;
+      --bg-surface-glass: rgba(255, 255, 255, 0.7);
+      
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      
+      --accent-1: #4f46e5;
+      --accent-2: #818cf8;
+      --accent-3: #c7d2fe;
+      
+      --border-color: rgba(79, 70, 229, 0.15);
+      --card-shadow: 0 20px 40px -15px rgba(79, 70, 229, 0.1);
+      --glass-border: rgba(255, 255, 255, 0.5);
     }
+    
     @media (prefers-color-scheme: dark) {
       :root {
-        --ink: #f0f1f7;
-        --body: #c7c8d4;
-        --muted: #9a9aaa;
-        --surface: #121219;
-        --surface-2: #1b1b26;
-        --border: #2a2a38;
+        /* Dark Mode Palette - Deep Premium Dark */
+        --bg-base: #09090b;
+        --bg-surface: #18181b;
+        --bg-surface-glass: rgba(24, 24, 27, 0.6);
+        
+        --text-main: #f8fafc;
+        --text-muted: #a1a1aa;
+        
+        --accent-1: #6366f1;
+        --accent-2: #4f46e5;
+        --accent-3: #312e81;
+        
+        --border-color: rgba(255, 255, 255, 0.08);
+        --card-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
+        --glass-border: rgba(255, 255, 255, 0.05);
       }
     }
 
@@ -43,133 +62,269 @@
     html { scroll-behavior: smooth; }
     body {
       margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       line-height: 1.6;
-      color: var(--body);
-      background: var(--surface);
+      color: var(--text-main);
+      background: var(--bg-base);
       -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
     }
-    a { color: var(--indigo); text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    h1, h2, h3 { color: var(--ink); line-height: 1.2; letter-spacing: -0.02em; }
-
-    .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 1.5rem; }
-
-    /* ---------- Hero ---------- */
-    .hero {
-      background: linear-gradient(135deg, var(--indigo) 0%, var(--indigo-dark) 55%, var(--indigo-deep) 100%);
-      color: #fff;
-      padding: 5rem 1.5rem 5.5rem;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
+    h1, h2, h3 { 
+      font-family: 'Outfit', sans-serif;
+      color: var(--text-main); 
+      line-height: 1.1; 
+      letter-spacing: -0.02em; 
     }
-    .hero::after {
-      /* subtle radial sheen, top-left, echoing the feature graphic */
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at 22% 30%, rgba(255,255,255,0.10), transparent 45%);
+    a { color: var(--accent-1); text-decoration: none; transition: color 0.2s ease; }
+    a:hover { color: var(--accent-2); }
+
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 0 2rem; }
+
+    /* ---------- Animated Background Sheen ---------- */
+    .bg-sheen {
+      position: fixed;
+      top: -50%; left: -50%; width: 200%; height: 200%;
+      background: radial-gradient(circle at 50% 50%, var(--accent-1) 0%, transparent 40%),
+                  radial-gradient(circle at 80% 20%, var(--accent-2) 0%, transparent 30%);
+      opacity: 0.05;
+      z-index: -1;
       pointer-events: none;
+      animation: rotateBg 30s linear infinite;
     }
-    .hero-inner { position: relative; max-width: 720px; margin: 0 auto; }
+    @keyframes rotateBg {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* ---------- Hero Section ---------- */
+    .hero {
+      position: relative;
+      padding: 8rem 0 6rem;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .hero-badge {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      border-radius: 999px;
+      background: var(--bg-surface-glass);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--border-color);
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--accent-1);
+      margin-bottom: 2rem;
+      animation: fadeDown 0.8s ease-out;
+    }
+    .mark-container {
+      position: relative;
+      width: 120px; height: 120px;
+      margin: 0 auto 2rem;
+      animation: scaleUp 1s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .mark-container::before {
+      content: '';
+      position: absolute;
+      inset: -10px;
+      background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+      border-radius: 36px;
+      filter: blur(20px);
+      opacity: 0.4;
+      z-index: -1;
+    }
     .mark {
-      width: 96px; height: 96px;
-      border-radius: 24px;
-      display: block; margin: 0 auto 1.5rem;
-      box-shadow: 0 12px 32px rgba(0,0,0,0.28);
+      width: 100%; height: 100%;
+      border-radius: 28px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
     }
     .hero h1 {
-      color: #fff;
-      font-size: clamp(2.4rem, 7vw, 3.6rem);
-      margin: 0 0 0.6rem;
+      font-size: clamp(3rem, 8vw, 5rem);
+      margin: 0 0 1rem;
       font-weight: 800;
+      background: linear-gradient(135deg, var(--text-main) 0%, var(--accent-1) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: fadeUp 0.8s ease-out 0.2s both;
     }
     .tagline {
-      font-size: clamp(1.05rem, 3vw, 1.35rem);
-      color: rgba(255,255,255,0.92);
-      margin: 0 auto 2.2rem;
-      max-width: 36ch;
+      font-size: clamp(1.1rem, 3vw, 1.4rem);
+      color: var(--text-muted);
+      margin: 0 auto 3rem;
+      max-width: 42ch;
+      animation: fadeUp 0.8s ease-out 0.4s both;
+    }
+    .cta-group {
+      animation: fadeUp 0.8s ease-out 0.6s both;
     }
     .cta {
-      display: inline-flex; align-items: center; gap: 0.5rem;
-      background: #fff; color: var(--indigo-dark);
-      font-weight: 700; font-size: 1.05rem;
-      padding: 0.85rem 1.8rem; border-radius: 999px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.22);
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      display: inline-flex; align-items: center; justify-content: center;
+      gap: 0.75rem;
+      background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+      color: #fff;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700; font-size: 1.1rem;
+      padding: 1rem 2.5rem; border-radius: 999px;
+      box-shadow: 0 10px 25px rgba(99, 102, 241, 0.4);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .cta:hover { text-decoration: none; transform: translateY(-2px); box-shadow: 0 12px 26px rgba(0,0,0,0.28); }
-    .cta-note { display: block; margin-top: 1rem; font-size: 0.85rem; color: rgba(255,255,255,0.72); }
+    .cta:hover { 
+      transform: translateY(-4px); 
+      box-shadow: 0 20px 35px rgba(99, 102, 241, 0.5); 
+      color: #fff;
+    }
+    .cta svg { width: 20px; height: 20px; fill: currentColor; }
+    .cta-note { 
+      display: block; 
+      margin-top: 1.25rem; 
+      font-size: 0.9rem; 
+      color: var(--text-muted); 
+    }
 
-    /* ---------- Sections ---------- */
-    section { padding: 4rem 0; }
-    .section-head { text-align: center; max-width: 640px; margin: 0 auto 2.6rem; }
-    .section-head h2 { font-size: clamp(1.6rem, 4vw, 2.1rem); margin: 0 0 0.6rem; }
-    .section-head p { color: var(--muted); margin: 0; font-size: 1.05rem; }
+    /* ---------- Features Section ---------- */
+    .section-head { 
+      text-align: center; 
+      max-width: 700px; 
+      margin: 0 auto 4rem; 
+    }
+    .section-head h2 { font-size: clamp(2rem, 5vw, 3rem); margin: 0 0 1rem; }
+    .section-head p { color: var(--text-muted); margin: 0; font-size: 1.15rem; }
     .eyebrow {
-      text-transform: uppercase; letter-spacing: 0.12em; font-size: 0.78rem;
-      font-weight: 700; color: var(--indigo); margin: 0 0 0.6rem;
+      display: inline-block;
+      text-transform: uppercase; letter-spacing: 0.15em; font-size: 0.85rem;
+      font-weight: 800; color: var(--accent-1); margin: 0 0 1rem;
     }
 
-    /* ---------- Feature grid ---------- */
     .features {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 1.1rem;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2rem;
+      padding-bottom: 6rem;
     }
     .card {
-      background: var(--surface-2);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 1.6rem 1.5rem;
-      transition: transform 0.15s ease, border-color 0.15s ease;
+      position: relative;
+      background: var(--bg-surface-glass);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-color);
+      border-radius: 24px;
+      padding: 2.5rem 2rem;
+      box-shadow: var(--card-shadow);
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      overflow: hidden;
+      z-index: 1;
     }
-    .card:hover { transform: translateY(-3px); border-color: var(--indigo); }
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 4px;
+      background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+    .card:hover { 
+      transform: translateY(-8px); 
+      background: var(--bg-surface);
+      border-color: var(--accent-1);
+      box-shadow: 0 30px 60px -20px rgba(99, 102, 241, 0.2);
+    }
+    .card:hover::before { opacity: 1; }
+    
     .card .ico {
-      width: 44px; height: 44px; border-radius: 12px;
-      display: grid; place-items: center; margin-bottom: 1rem;
-      background: rgba(63,81,181,0.12); color: var(--indigo);
+      width: 56px; height: 56px; border-radius: 16px;
+      display: grid; place-items: center; margin-bottom: 1.5rem;
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(99, 102, 241, 0.05));
+      color: var(--accent-1);
+      border: 1px solid var(--border-color);
     }
-    .card .ico svg { width: 24px; height: 24px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-    .card h3 { font-size: 1.12rem; margin: 0 0 0.4rem; }
-    .card p { margin: 0; font-size: 0.96rem; color: var(--muted); }
+    .card .ico svg { width: 28px; height: 28px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .card h3 { font-size: 1.3rem; margin: 0 0 0.75rem; }
+    .card p { margin: 0; font-size: 1.05rem; color: var(--text-muted); line-height: 1.6; }
 
-    /* ---------- Screenshots ---------- */
-    .shots-band { background: var(--surface-2); }
+    /* ---------- Screenshots Section ---------- */
+    .shots-band { 
+      position: relative;
+      padding: 6rem 0;
+      background: linear-gradient(180deg, var(--bg-base) 0%, var(--bg-surface) 100%);
+      border-top: 1px solid var(--border-color);
+      border-bottom: 1px solid var(--border-color);
+    }
     .shots {
-      display: flex; gap: 1.25rem; overflow-x: auto;
-      padding: 0.5rem 0 1.25rem; scroll-snap-type: x mandatory;
+      display: flex; gap: 2.5rem; overflow-x: auto;
+      padding: 2rem 1rem 3rem; scroll-snap-type: x mandatory;
       -webkit-overflow-scrolling: touch;
+      scrollbar-width: none; /* Firefox */
     }
+    .shots::-webkit-scrollbar { display: none; } /* Chrome */
     .shots img {
-      height: 460px; width: auto; border-radius: 20px;
+      height: 520px; width: auto; 
+      border-radius: 24px;
       scroll-snap-align: center; flex: 0 0 auto;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.18);
-      border: 1px solid var(--border);
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.3);
+      border: 1px solid var(--border-color);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .shots-hint { text-align: center; color: var(--muted); font-size: 0.85rem; margin-top: 0.5rem; }
+    .shots img:hover { transform: scale(1.03) translateY(-10px); }
+    .shots-hint { 
+      text-align: center; color: var(--text-muted); 
+      font-size: 0.9rem; margin-top: 1rem; 
+      font-weight: 500; letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
 
     /* ---------- Footer ---------- */
     footer {
-      border-top: 1px solid var(--border);
-      padding: 2.5rem 1.5rem;
-      text-align: center; color: var(--muted); font-size: 0.92rem;
+      padding: 4rem 1.5rem;
+      text-align: center; color: var(--text-muted); font-size: 0.95rem;
+      background: var(--bg-surface);
     }
-    footer .links { margin-bottom: 0.8rem; }
-    footer .links a { margin: 0 0.7rem; color: var(--body); }
-    footer .brand { display: inline-flex; align-items: center; gap: 0.5rem; font-weight: 700; color: var(--ink); margin-bottom: 0.8rem; }
-    footer .brand img { width: 24px; height: 24px; border-radius: 6px; }
+    footer .links { margin-bottom: 1.5rem; }
+    footer .links a { 
+      margin: 0 1rem; 
+      color: var(--text-main); 
+      font-weight: 500;
+    }
+    footer .links a:hover { color: var(--accent-1); }
+    footer .brand { 
+      display: inline-flex; align-items: center; gap: 0.75rem; 
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 800; color: var(--text-main); 
+      margin-bottom: 1.5rem; 
+    }
+    footer .brand img { width: 32px; height: 32px; border-radius: 8px; }
+
+    /* Animations */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes scaleUp {
+      from { opacity: 0; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1); }
+    }
   </style>
 </head>
 <body>
 
-  <header class="hero">
-    <div class="hero-inner">
-      <img class="mark" src="./assets/icon-512.png" alt="TaskRhythm icon" width="96" height="96">
-      <h1>TaskRhythm</h1>
-      <p class="tagline">Tasks that repeat, kept on rhythm — workday-aware reminders for Android.</p>
+  <div class="bg-sheen"></div>
+
+  <header class="hero wrap">
+    <div class="hero-badge">Now available for Android</div>
+    <div class="mark-container">
+      <img class="mark" src="./assets/icon-512.png" alt="TaskRhythm icon" width="120" height="120">
+    </div>
+    <h1>TaskRhythm</h1>
+    <p class="tagline">Tasks that repeat, kept on rhythm — workday-aware reminders built for your actual schedule.</p>
+    
+    <div class="cta-group">
       <a class="cta" href="https://play.google.com/store/apps/details?id=com.taskrhythm">
+        <svg viewBox="0 0 24 24"><path d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.16,10.81C20.5,11.08 20.75,11.5 20.75,12C20.75,12.5 20.53,12.9 20.18,13.18L17.89,14.5L15.39,12L17.89,9.5L20.16,10.81M6.05,2.66L16.81,8.88L14.54,11.15L6.05,2.66Z" /></svg>
         Get it on Google Play
       </a>
       <span class="cta-note">Free to use · Optional Pro unlock for multi-device sync</span>
@@ -177,45 +332,43 @@
   </header>
 
   <main>
-    <section>
-      <div class="wrap">
-        <div class="section-head">
-          <p class="eyebrow">Built for real schedules</p>
-          <h2>Recurrence that follows the rules you actually use</h2>
-          <p>Most to-do apps treat &ldquo;repeat monthly&rdquo; as date arithmetic that breaks on weekends and holidays. TaskRhythm models the patterns the way they&rsquo;re written.</p>
-        </div>
+    <section class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Built for real schedules</span>
+        <h2>Recurrence that follows the rules you actually use</h2>
+        <p>Most to-do apps treat "repeat monthly" as date arithmetic that breaks on weekends and holidays. TaskRhythm models the patterns the way they’re written.</p>
+      </div>
 
-        <div class="features">
-          <div class="card">
-            <div class="ico"><svg viewBox="0 0 24 24"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg></div>
-            <h3>Workday-aware recurrence</h3>
-            <p>First or last workday of the week, month, or year. Nth weekday-of-month. Nth day from the end. Weekday- and weekend-only modes.</p>
-          </div>
-          <div class="card">
-            <div class="ico"><svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></div>
-            <h3>Reminders that fire on time</h3>
-            <p>Exact-time local notifications with a default lead-time and per-task overrides. &ldquo;Done&rdquo; and &ldquo;Snooze&rdquo; actions inline. They survive a reboot.</p>
-          </div>
-          <div class="card">
-            <div class="ico"><svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><rect x="7" y="11" width="3" height="7"/><rect x="12" y="7" width="3" height="11"/><rect x="17" y="13" width="3" height="5"/></svg></div>
-            <h3>History &amp; streaks</h3>
-            <p>Every completion is logged. See your streak, 30-day chart, and per-category breakdown — and restore any past completion with one tap.</p>
-          </div>
-          <div class="card">
-            <div class="ico"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>
-            <h3>Calendar &amp; holidays</h3>
-            <p>A month view alongside the day&rsquo;s tasks. Maintain your own holiday calendar and TaskRhythm reschedules around it.</p>
-          </div>
-          <div class="card">
-            <div class="ico"><svg viewBox="0 0 24 24"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg></div>
-            <h3>Your data, your device</h3>
-            <p>Tasks live in a private database on your phone. No ads, no telemetry. Multi-device sync is opt-in and unlocked only when you choose Pro.</p>
-          </div>
-          <div class="card">
-            <div class="ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></div>
-            <h3>Material You design</h3>
-            <p>Dynamic colour on Android 12+, five curated palettes, and light / dark / true-black themes. Adaptive layouts for phone, tablet, and foldables.</p>
-          </div>
+      <div class="features">
+        <div class="card">
+          <div class="ico"><svg viewBox="0 0 24 24"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg></div>
+          <h3>Workday-aware</h3>
+          <p>First or last workday of the week, month, or year. Nth weekday-of-month. Nth day from the end. Weekday- and weekend-only modes.</p>
+        </div>
+        <div class="card">
+          <div class="ico"><svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></div>
+          <h3>Reminders on time</h3>
+          <p>Exact-time local notifications with a default lead-time and per-task overrides. "Done" and "Snooze" actions inline. They survive a reboot.</p>
+        </div>
+        <div class="card">
+          <div class="ico"><svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><rect x="7" y="11" width="3" height="7"/><rect x="12" y="7" width="3" height="11"/><rect x="17" y="13" width="3" height="5"/></svg></div>
+          <h3>History &amp; streaks</h3>
+          <p>Every completion is logged. See your streak, 30-day chart, and per-category breakdown — and restore any past completion with one tap.</p>
+        </div>
+        <div class="card">
+          <div class="ico"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>
+          <h3>Calendar &amp; holidays</h3>
+          <p>A month view alongside the day’s tasks. Maintain your own holiday calendar and TaskRhythm intelligently reschedules around it.</p>
+        </div>
+        <div class="card">
+          <div class="ico"><svg viewBox="0 0 24 24"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg></div>
+          <h3>Private &amp; Secure</h3>
+          <p>Tasks live in a private database on your phone. No ads, no telemetry. Multi-device sync is opt-in and unlocked only when you choose Pro.</p>
+        </div>
+        <div class="card">
+          <div class="ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></div>
+          <h3>Material You design</h3>
+          <p>Dynamic colour on Android 12+, five curated palettes, and light / dark / true-black themes. Adaptive layouts for phone, tablet, and foldables.</p>
         </div>
       </div>
     </section>
@@ -223,7 +376,7 @@
     <section class="shots-band">
       <div class="wrap">
         <div class="section-head">
-          <p class="eyebrow">A look inside</p>
+          <span class="eyebrow">A look inside</span>
           <h2>Clean, focused, fast</h2>
         </div>
         <div class="shots">
@@ -233,13 +386,16 @@
           <img src="./screenshots/04-recurrence-picker-dark.png" alt="Recurrence picker" loading="lazy">
           <img src="./screenshots/05-tasks-all-light.png" alt="Light theme" loading="lazy">
         </div>
-        <p class="shots-hint">&larr; swipe to see more &rarr;</p>
+        <p class="shots-hint">&larr; Swipe to explore &rarr;</p>
       </div>
     </section>
   </main>
 
   <footer>
-    <div class="brand"><img src="./assets/icon-192.png" alt="">TaskRhythm</div>
+    <div class="brand">
+      <img src="./assets/icon-192.png" alt="">
+      TaskRhythm
+    </div>
     <div class="links">
       <a href="./privacy-policy.html">Privacy Policy</a>
       <a href="https://play.google.com/store/apps/details?id=com.taskrhythm">Google Play</a>
