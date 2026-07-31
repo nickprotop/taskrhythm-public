@@ -1,0 +1,41 @@
+name: Generate Roadmap JSON
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # Run daily at midnight UTC
+  issues:
+    types: [opened, edited, deleted, closed, reopened, labeled, unlabeled] # Update immediately when issues change
+  workflow_dispatch: # Allow manual triggering
+
+jobs:
+  generate-roadmap:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Fetch Roadmap Issues and Generate JSON
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          mkdir -p docs
+          # Fetch open issues with the label 'enhancement'
+          gh issue list --state open --label "enhancement" --json number,title,url,body,reactions --limit 100 > docs/roadmap.json
+
+      - name: Commit and Push changes
+        run: |
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add docs/roadmap.json
+          
+          # Only commit if there are changes
+          if ! git diff-index --quiet HEAD; then
+            git commit -m "chore: update roadmap.json [skip ci]"
+            git push
+          else
+            echo "No changes to roadmap.json"
+          fi
