@@ -24,7 +24,7 @@ jobs:
         run: |
           mkdir -p docs
           # Fetch open issues with the label 'enhancement'
-          gh issue list --state open --label "enhancement" --json number,title,url,body,reactions --limit 100 > docs/roadmap.json
+          gh issue list --state open --label "enhancement" --json number,title,url,body,reactionGroups --limit 100 > docs/roadmap.json
 
       - name: Commit and Push changes
         run: |
